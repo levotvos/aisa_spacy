@@ -1,0 +1,11 @@
+[
+    {"label": "DATUM", "pattern": [ {"TEXT": {"REGEX": "\\d{4}\\.\\d{2}\\.\\d{2}\\.?"}} ]},
+    {"label": "DATUM", "pattern": [
+        {"TEXT": {"REGEX": "\\d{4}\\."}},
+        { "TEXT": {"REGEX": "(?:január|február|március|április|május|június|július|augusztus|szeptember|október|november|december)"}},
+        { "TEXT": {"REGEX" : "(\\d{2}\\[.-]?)?"}}
+        ]},
+    {"label": "Azonosító szám", "pattern": [ {"TEXT": {"REGEX": "\\d{10}" } } ] },
+    {"label": "adószám", "pattern": [ {"TEXT": {"FUZZY": "\\d{8}\\w?-\\w?\\d{1}\\w?-\\w?\\d{2}" } } ] },
+    {"label": "BANKSZAM", "pattern": [ {"TEXT": {"FUZZY": "\\d{8}\\w?-\\w?\\d{8}\\w?-\\w?\\d{8}" } } ] }
+]
