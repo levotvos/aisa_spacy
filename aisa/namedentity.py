@@ -5,5 +5,6 @@ from typing import Tuple
 @dataclass
 class NamedEntity:
     span: Tuple[int, int]
+    char_span: Tuple[int, int]
     label: str
     text: str

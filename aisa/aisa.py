@@ -26,7 +26,12 @@ def get_entities_with_char_spans(doc: spacy.language.Doc) -> List[NamedEntity]:
     entities = []
     for ent in doc.ents:
         entities.append(
-            NamedEntity((ent.start_char, ent.end_char), ent.label_, ent.text)
+            NamedEntity(
+                (ent.start, ent.end),
+                (ent.start_char, ent.end_char),
+                ent.label_,
+                ent.text,
+            )
         )
 
     return entities
@@ -47,10 +52,27 @@ class AISA:
         with open(os.path.join("assets", "entity_rules.json")) as rules_file:
             entity_rules = json.load(rules_file)
 
-        ruler = self.nlp.add_pipe("entity_ruler", before="ner")
+        entity_ruler_config = { "overwrite_ents" : True }
+        ruler = self.nlp.add_pipe("entity_ruler", after="ner", config=entity_ruler_config)
         ruler.add_patterns(entity_rules)
 
     def __call__(self, text: str) -> Dict:
         doc = self.nlp(text)
+        
+        entity_list = []
+        
+        # Drop MISC labelled entities
+        for ne in get_entities_with_char_spans(doc):
+            if ne.label == "MISC":
+                continue
+            if ne.text.startswith("Revízió") or ne.text.startswith("Adóig"):
+                continue
 
-        return get_entities_with_char_spans(doc)
+            if ne.label == "ORG":
+                ne.label = "Gazdálkodó"
+            if ne.label == "PER":
+                ne.label = "Személy"
+                  
+            entity_list.append(ne)
+ 
+        return entity_list

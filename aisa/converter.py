@@ -40,8 +40,8 @@ class LabelStudioConverter(AnnotationConverter):
             annot["annotations"][-1]["result"].append(
                 {
                     "value": {
-                        "start": entity.span[0],
-                        "end": entity.span[1],
+                        "start": entity.char_span[0],
+                        "end": entity.char_span[1],
                         "labels": [entity.label],
                     },
                     "from_name": "label",
